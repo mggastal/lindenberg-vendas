@@ -200,6 +200,7 @@ h1{font-size:26px;font-weight:700;letter-spacing:-.4px;margin-top:4px}
 .legend .ln::before{height:3px;border-radius:2px;vertical-align:3px}
 .chart{position:relative;height:300px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid2>*{min-width:0}
 .tbl{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 th{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:600;text-align:right;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
@@ -222,6 +223,7 @@ footer{display:flex;justify-content:center;align-items:center;gap:8px;color:var(
 .gm{font-size:11px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#E07832}
 .gm span{color:var(--ink);font-weight:400}
 @media (max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2,.crs{grid-template-columns:1fr}}
+@media (max-width:600px){.hm,.bar{display:none}th,td{padding:8px 5px;font-size:13px}th{font-size:10px;letter-spacing:.4px}.card{padding:14px}.tag{border:0;padding:0;margin-left:1px;font-size:0}.tag::after{content:"*";font-size:13px}}
 @media (max-width:520px){.cr{flex-direction:column}.cr img{width:100%;height:auto;aspect-ratio:1}}
 @media (max-width:420px){.kpi .v{font-size:21px}h1{font-size:22px}.chart{height:250px}}
 </style>
@@ -311,24 +313,26 @@ else document.getElementById('crs').innerHTML = D.criativos.map(c => `<div class
 // Tabelas
 const maxLeads = Math.max(...D.semanas.map(s=>s.leads), 1);
 document.getElementById('capSem').textContent = D.semanas.length + ' semanas · semanas incompletas marcadas';
-const sumRow = (lbl, t) => `<tfoot><tr><td>${lbl}</td><td>${brl(t.spend)}</td><td>${int(t.leads)}</td><td>${brl(t.cpl)}</td><td>${int(t.imp)}</td><td>${int(t.lc)}</td><td>${pct(t.ctr)}</td><td>${pct(t.conv)}</td></tr></tfoot>`;
+const sumRow = (lbl, t) => `<tfoot><tr><td>${lbl}</td><td>${brl0(t.spend)}</td><td>${int(t.leads)}</td><td>${brl(t.cpl)}</td><td class="hm">${int(t.imp)}</td><td class="hm">${int(t.lc)}</td><td class="hm">${pct(t.ctr)}</td><td class="hm">${pct(t.conv)}</td></tr></tfoot>`;
 document.getElementById('tSem').innerHTML =
-  `<thead><tr><th>Semana</th><th>Investimento</th><th>Leads</th><th>CPL</th><th>Impressões</th><th>Cliques</th><th>CTR</th><th>Clique→lead</th></tr></thead><tbody>` +
-  D.semanas.map(s => `<tr><td>${s.label}${s.parcial?'<span class="tag">parcial</span>':''}</td><td>${brl(s.spend)}</td>
+  `<thead><tr><th>Semana</th><th>Investimento</th><th>Leads</th><th>CPL</th><th class="hm">Impressões</th><th class="hm">Cliques</th><th class="hm">CTR</th><th class="hm">Clique→lead</th></tr></thead><tbody>` +
+  D.semanas.map(s => `<tr><td>${s.label}${s.parcial?'<span class="tag">parcial</span>':''}</td><td>${brl0(s.spend)}</td>
     <td><span class="bar" style="width:${Math.round(s.leads/maxLeads*48)}px"></span>${int(s.leads)}</td>
-    <td>${brl(s.cpl)}</td><td>${int(s.imp)}</td><td>${int(s.lc)}</td><td>${pct(s.ctr)}</td><td>${pct(s.conv)}</td></tr>`).join('') +
+    <td>${brl(s.cpl)}</td><td class="hm">${int(s.imp)}</td><td class="hm">${int(s.lc)}</td><td class="hm">${pct(s.ctr)}</td><td class="hm">${pct(s.conv)}</td></tr>`).join('') +
   '</tbody>' + sumRow('Total', T);
 document.getElementById('tMes').innerHTML =
-  `<thead><tr><th>Mês</th><th>Dias</th><th>Investimento</th><th>Leads</th><th>CPL</th></tr></thead><tbody>` +
-  D.meses.map(m => `<tr><td>${m.label}</td><td>${m.dias}</td><td>${brl0(m.spend)}</td><td>${int(m.leads)}</td><td>${brl(m.cpl)}</td></tr>`).join('') +
-  `</tbody><tfoot><tr><td>Total</td><td></td><td>${brl0(T.spend)}</td><td>${int(T.leads)}</td><td>${brl(T.cpl)}</td></tr></tfoot>`;
+  `<thead><tr><th>Mês</th><th class="hm">Dias</th><th>Investimento</th><th>Leads</th><th>CPL</th></tr></thead><tbody>` +
+  D.meses.map(m => `<tr><td>${m.label}</td><td class="hm">${m.dias}</td><td>${brl0(m.spend)}</td><td>${int(m.leads)}</td><td>${brl(m.cpl)}</td></tr>`).join('') +
+  `</tbody><tfoot><tr><td>Total</td><td class="hm"></td><td>${brl0(T.spend)}</td><td>${int(T.leads)}</td><td>${brl(T.cpl)}</td></tr></tfoot>`;
 
 // Gráficos
 let charts = [];
 // Rótulos de dados: leads dentro do topo da barra, CPL acima do ponto da linha
 const rotulos = {id:'rotulos', afterDatasetsDraw(chart){
   const {ctx} = chart;
-  ctx.save(); ctx.textAlign = 'center'; ctx.font = "600 11px 'DM Sans', system-ui, sans-serif";
+  ctx.save(); ctx.textAlign = 'center';
+  const n = chart.data.labels.length, apertado = chart.chartArea.width / n < 46;   // celular: alterna rótulos do CPL
+  ctx.font = `600 ${apertado ? 10 : 11}px 'DM Sans', system-ui, sans-serif`;
   chart.data.datasets.forEach((ds, i) => {
     const meta = chart.getDatasetMeta(i);
     if (meta.hidden) return;
@@ -338,10 +342,11 @@ const rotulos = {id:'rotulos', afterDatasetsDraw(chart){
         ctx.fillStyle = '#fff'; ctx.textBaseline = 'top';
         ctx.fillText(v, el.x, el.y + 5);
       } else {
-        const t = 'R$ ' + Math.round(v);
-        ctx.textBaseline = 'bottom';
-        ctx.lineWidth = 3; ctx.strokeStyle = css('--card'); ctx.strokeText(t, el.x, el.y - 6);
-        ctx.fillStyle = css('--ink'); ctx.fillText(t, el.x, el.y - 6);
+        const t = (apertado ? '' : 'R$ ') + Math.round(v), baixo = apertado && j % 2;
+        const y = baixo ? el.y + 7 : el.y - 6;
+        ctx.textBaseline = baixo ? 'top' : 'bottom';
+        ctx.lineWidth = 3; ctx.strokeStyle = css('--card'); ctx.strokeText(t, el.x, y);
+        ctx.fillStyle = css('--ink'); ctx.fillText(t, el.x, y);
       }
     });
   });
