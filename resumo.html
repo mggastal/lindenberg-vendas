@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lindenberg Vendas · Resumo</title>
+<link rel="icon" href="https://mggastal.github.io/sobe-template/sobe.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f6f5f3;--card:#ffffff;--ink:#1c1a19;--muted:#6f6a66;--line:#e7e3df;
+  --accent:#8B0000;--accent-soft:#f3e3e1;--series2:#c9a227;--good:#1f7a4d;--grid:#eeeae6;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141211;--card:#1d1b1a;--ink:#f1edea;--muted:#a59f9a;--line:#2e2a28;
+  --accent:#e0675e;--accent-soft:#3a201e;--series2:#e3bf4a;--good:#4fc58a;--grid:#2a2624;
+}}
+:root[data-theme="dark"]{
+  --bg:#141211;--card:#1d1b1a;--ink:#f1edea;--muted:#a59f9a;--line:#2e2a28;
+  --accent:#e0675e;--accent-soft:#3a201e;--series2:#e3bf4a;--good:#4fc58a;--grid:#2a2624;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;font-size:14px;line-height:1.45}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 16px 40px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.eyebrow{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{font-size:26px;font-weight:700;letter-spacing:-.4px;margin-top:4px}
+.sub{color:var(--muted);margin-top:4px}
+.meta{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;text-align:right}
+.meta img{height:18px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.kpi .l{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600}
+.kpi .v{font-size:26px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.kpi .h{font-size:12px;color:var(--muted);margin-top:2px}
+.kpi.main{border-color:var(--accent);background:linear-gradient(0deg,var(--card),var(--card)) padding-box}
+.kpi.main .v{color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+.card h2{font-size:15px;font-weight:700}
+.card .cap{color:var(--muted);font-size:12px;margin-top:2px}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+.legend .ln::before{height:3px;border-radius:2px;vertical-align:3px}
+.chart{position:relative;height:300px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:600;text-align:right;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{text-align:right;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+tr:last-child td{border-bottom:none}
+tfoot td{font-weight:700;border-top:2px solid var(--line)}
+.bar{display:inline-block;height:6px;border-radius:3px;background:var(--accent);vertical-align:middle;margin-right:8px;opacity:.85}
+.tag{font-size:10px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 4px;margin-left:6px}
+.crs{display:grid;grid-template-columns:1fr;gap:16px}
+.cr{display:flex;gap:16px;align-items:flex-start}
+.cr img{width:200px;height:200px;object-fit:cover;border-radius:10px;border:1px solid var(--line);flex-shrink:0;background:var(--bg)}
+.cr .emp{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:600}
+.cr .nm{font-size:17px;font-weight:700;margin:2px 0 10px}
+.cr dl{display:grid;grid-template-columns:auto auto;gap:4px 18px;font-size:13px}
+.cr dt{color:var(--muted)}
+.cr dd{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.note{font-size:12px;color:var(--muted);margin-top:10px}
+footer{display:flex;justify-content:center;align-items:center;gap:8px;color:var(--muted);font-size:12px;margin-top:24px}
+footer img{height:22px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .logo-sobe{filter:brightness(0) invert(1)}}
+:root[data-theme="dark"] .logo-sobe{filter:brightness(0) invert(1)}
+@media (max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2,.crs{grid-template-columns:1fr}}
+@media (max-width:520px){.cr{flex-direction:column}.cr img{width:100%;height:auto;aspect-ratio:1}}
+@media (max-width:420px){.kpi .v{font-size:21px}h1{font-size:22px}.chart{height:250px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Meta Ads · Resumo geral</div>
+      <h1>Lindenberg Vendas</h1>
+      <div class="sub" id="periodo"></div>
+    </div>
+    <div class="meta"><div id="atualizado"></div></div>
+  </header>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="card">
+    <div class="card-head">
+      <div><h2>Leads por semana</h2><div class="cap">Semanas de segunda a domingo · CPL na linha</div></div>
+      <div class="legend"><span style="--c:var(--accent)">Leads</span><span class="ln" style="--c:var(--series2)">CPL</span></div>
+    </div>
+    <div class="chart"><canvas id="cSemana"></canvas></div>
+  </section>
+
+  <section class="card" id="secCr">
+    <div class="card-head"><div><h2>Melhor criativo</h2><div class="cap">Anúncio com mais leads, somando todos os conjuntos em que rodou</div></div></div>
+    <div class="crs" id="crs"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><div><h2>Semana a semana</h2><div class="cap" id="capSem"></div></div></div>
+    <div class="tbl"><table id="tSem"></table></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="card-head"><div><h2>Por mês</h2><div class="cap">Totais mensais do período</div></div></div>
+      <div class="tbl"><table id="tMes"></table></div>
+    </section>
+    <section class="card">
+      <div class="card-head">
+        <div><h2>Investimento diário</h2><div class="cap">Valor investido por dia</div></div>
+      </div>
+      <div class="chart" style="height:240px"><canvas id="cDia"></canvas></div>
+    </section>
+  </div>
+
+  <footer>Desenvolvido por <img class="logo-sobe" src="https://mggastal.github.io/sobe-template/sobe.png" alt="Sobé"></footer>
+</div>
+
+<script>
+const D = {"periodo": "27/07/2026 a 17/10/2026", "ultimo_invest": "16/10/2026", "atualizado": "28/10/2026 09:50", "total": {"spend": 31476.97, "imp": 825537, "lc": 10518, "leads": 284, "cpl": 110.83, "ctr": 1.27, "cpc": 2.99, "cpm": 38.13, "conv": 2.7, "leads_dia": 3.46}, "semanas": [{"spend": 2683.7, "imp": 52488, "lc": 1013, "leads": 22, "cpl": 121.99, "ctr": 1.93, "cpc": 2.65, "cpm": 51.13, "conv": 2.17, "label": "27/07–02/08", "parcial": false}, {"spend": 2748.74, "imp": 69454, "lc": 1189, "leads": 21, "cpl": 130.89, "ctr": 1.71, "cpc": 2.31, "cpm": 39.58, "conv": 1.77, "label": "03/08–09/08", "parcial": false}, {"spend": 2804.09, "imp": 78923, "lc": 1070, "leads": 25, "cpl": 112.16, "ctr": 1.36, "cpc": 2.62, "cpm": 35.53, "conv": 2.34, "label": "10/08–16/08", "parcial": false}, {"spend": 2776.37, "imp": 75857, "lc": 1003, "leads": 24, "cpl": 115.68, "ctr": 1.32, "cpc": 2.77, "cpm": 36.6, "conv": 2.39, "label": "17/08–23/08", "parcial": false}, {"spend": 2746.95, "imp": 61800, "lc": 797, "leads": 19, "cpl": 144.58, "ctr": 1.29, "cpc": 3.45, "cpm": 44.45, "conv": 2.38, "label": "24/08–30/08", "parcial": false}, {"spend": 2813.1, "imp": 68083, "lc": 723, "leads": 25, "cpl": 112.52, "ctr": 1.06, "cpc": 3.89, "cpm": 41.32, "conv": 3.46, "label": "31/08–06/09", "parcial": false}, {"spend": 2724.25, "imp": 71219, "lc": 795, "leads": 23, "cpl": 118.45, "ctr": 1.12, "cpc": 3.43, "cpm": 38.25, "conv": 2.89, "label": "07/09–13/09", "parcial": false}, {"spend": 2226.28, "imp": 48600, "lc": 519, "leads": 21, "cpl": 106.01, "ctr": 1.07, "cpc": 4.29, "cpm": 45.81, "conv": 4.05, "label": "14/09–20/09", "parcial": false}, {"spend": 2414.51, "imp": 52167, "lc": 710, "leads": 20, "cpl": 120.73, "ctr": 1.36, "cpc": 3.4, "cpm": 46.28, "conv": 2.82, "label": "21/09–27/09", "parcial": false}, {"spend": 2710.19, "imp": 85089, "lc": 837, "leads": 30, "cpl": 90.34, "ctr": 0.98, "cpc": 3.24, "cpm": 31.85, "conv": 3.58, "label": "28/09–04/10", "parcial": false}, {"spend": 2783.65, "imp": 89718, "lc": 916, "leads": 24, "cpl": 115.99, "ctr": 1.02, "cpc": 3.04, "cpm": 31.03, "conv": 2.62, "label": "05/10–11/10", "parcial": false}, {"spend": 2045.14, "imp": 72139, "lc": 946, "leads": 30, "cpl": 68.17, "ctr": 1.31, "cpc": 2.16, "cpm": 28.35, "conv": 3.17, "label": "12/10–18/10", "parcial": true}], "meses": [{"spend": 1853.7, "imp": 33256, "lc": 595, "leads": 14, "cpl": 132.41, "ctr": 1.79, "cpc": 3.12, "cpm": 55.74, "conv": 2.35, "label": "Julho/26", "dias": 5}, {"spend": 12314.88, "imp": 316264, "lc": 4612, "leads": 99, "cpl": 124.39, "ctr": 1.46, "cpc": 2.67, "cpm": 38.94, "conv": 2.15, "label": "Agosto/26", "dias": 31}, {"spend": 10907.94, "imp": 254482, "lc": 2884, "leads": 102, "cpl": 106.94, "ctr": 1.13, "cpc": 3.78, "cpm": 42.86, "conv": 3.54, "label": "Setembro/26", "dias": 26}, {"spend": 6400.45, "imp": 221535, "lc": 2427, "leads": 69, "cpl": 92.76, "ctr": 1.1, "cpc": 2.64, "cpm": 28.89, "conv": 2.84, "label": "Outubro/26", "dias": 17}], "diario": [{"d": "27/07", "spend": 462.08, "imp": 8766, "lc": 158, "leads": 3, "cpl": 154.03, "ctr": 1.8, "cpc": 2.92, "cpm": 52.71, "conv": 1.9}, {"d": "28/07", "spend": 334.45, "imp": 5762, "lc": 101, "leads": 4, "cpl": 83.61, "ctr": 1.75, "cpc": 3.31, "cpm": 58.04, "conv": 3.96}, {"d": "29/07", "spend": 356.38, "imp": 6161, "lc": 108, "leads": 1, "cpl": 356.38, "ctr": 1.75, "cpc": 3.3, "cpm": 57.84, "conv": 0.93}, {"d": "30/07", "spend": 273.64, "imp": 5061, "lc": 100, "leads": 2, "cpl": 136.82, "ctr": 1.98, "cpc": 2.74, "cpm": 54.07, "conv": 2.0}, {"d": "31/07", "spend": 427.15, "imp": 7506, "lc": 128, "leads": 4, "cpl": 106.79, "ctr": 1.71, "cpc": 3.34, "cpm": 56.91, "conv": 3.12}, {"d": "01/08", "spend": 314.38, "imp": 5629, "lc": 113, "leads": 5, "cpl": 62.88, "ctr": 2.01, "cpc": 2.78, "cpm": 55.85, "conv": 4.42}, {"d": "02/08", "spend": 515.62, "imp": 13603, "lc": 305, "leads": 3, "cpl": 171.87, "ctr": 2.24, "cpc": 1.69, "cpm": 37.9, "conv": 0.98}, {"d": "03/08", "spend": 322.23, "imp": 9724, "lc": 153, "leads": 1, "cpl": 322.23, "ctr": 1.57, "cpc": 2.11, "cpm": 33.14, "conv": 0.65}, {"d": "04/08", "spend": 367.45, "imp": 8804, "lc": 154, "leads": 2, "cpl": 183.72, "ctr": 1.75, "cpc": 2.39, "cpm": 41.74, "conv": 1.3}, {"d": "05/08", "spend": 381.94, "imp": 9555, "lc": 158, "leads": 2, "cpl": 190.97, "ctr": 1.65, "cpc": 2.42, "cpm": 39.97, "conv": 1.27}, {"d": "06/08", "spend": 452.26, "imp": 8132, "lc": 144, "leads": 5, "cpl": 90.45, "ctr": 1.77, "cpc": 3.14, "cpm": 55.61, "conv": 3.47}, {"d": "07/08", "spend": 374.94, "imp": 9321, "lc": 174, "leads": 4, "cpl": 93.73, "ctr": 1.87, "cpc": 2.15, "cpm": 40.23, "conv": 2.3}, {"d": "08/08", "spend": 377.43, "imp": 9319, "lc": 203, "leads": 4, "cpl": 94.36, "ctr": 2.18, "cpc": 1.86, "cpm": 40.5, "conv": 1.97}, {"d": "09/08", "spend": 472.49, "imp": 14599, "lc": 203, "leads": 3, "cpl": 157.5, "ctr": 1.39, "cpc": 2.33, "cpm": 32.36, "conv": 1.48}, {"d": "10/08", "spend": 311.22, "imp": 11327, "lc": 158, "leads": 2, "cpl": 155.61, "ctr": 1.39, "cpc": 1.97, "cpm": 27.48, "conv": 1.27}, {"d": "11/08", "spend": 437.99, "imp": 14109, "lc": 209, "leads": 3, "cpl": 146.0, "ctr": 1.48, "cpc": 2.1, "cpm": 31.04, "conv": 1.44}, {"d": "12/08", "spend": 404.08, "imp": 12047, "lc": 145, "leads": 3, "cpl": 134.69, "ctr": 1.2, "cpc": 2.79, "cpm": 33.54, "conv": 2.07}, {"d": "13/08", "spend": 433.55, "imp": 11270, "lc": 133, "leads": 7, "cpl": 61.94, "ctr": 1.18, "cpc": 3.26, "cpm": 38.47, "conv": 5.26}, {"d": "14/08", "spend": 352.54, "imp": 10100, "lc": 98, "leads": 1, "cpl": 352.54, "ctr": 0.97, "cpc": 3.6, "cpm": 34.9, "conv": 1.02}, {"d": "15/08", "spend": 380.51, "imp": 8700, "lc": 160, "leads": 4, "cpl": 95.13, "ctr": 1.84, "cpc": 2.38, "cpm": 43.74, "conv": 2.5}, {"d": "16/08", "spend": 484.2, "imp": 11370, "lc": 167, "leads": 5, "cpl": 96.84, "ctr": 1.47, "cpc": 2.9, "cpm": 42.59, "conv": 2.99}, {"d": "17/08", "spend": 336.88, "imp": 11112, "lc": 137, "leads": 4, "cpl": 84.22, "ctr": 1.23, "cpc": 2.46, "cpm": 30.32, "conv": 2.92}, {"d": "18/08", "spend": 330.55, "imp": 11002, "lc": 130, "leads": 2, "cpl": 165.28, "ctr": 1.18, "cpc": 2.54, "cpm": 30.04, "conv": 1.54}, {"d": "19/08", "spend": 413.26, "imp": 12004, "lc": 134, "leads": 0, "cpl": null, "ctr": 1.12, "cpc": 3.08, "cpm": 34.43, "conv": 0.0}, {"d": "20/08", "spend": 385.38, "imp": 9805, "lc": 138, "leads": 1, "cpl": 385.38, "ctr": 1.41, "cpc": 2.79, "cpm": 39.3, "conv": 0.72}, {"d": "21/08", "spend": 414.68, "imp": 9722, "lc": 128, "leads": 3, "cpl": 138.23, "ctr": 1.32, "cpc": 3.24, "cpm": 42.65, "conv": 2.34}, {"d": "22/08", "spend": 426.89, "imp": 10577, "lc": 142, "leads": 8, "cpl": 53.36, "ctr": 1.34, "cpc": 3.01, "cpm": 40.36, "conv": 5.63}, {"d": "23/08", "spend": 468.73, "imp": 11635, "lc": 194, "leads": 6, "cpl": 78.12, "ctr": 1.67, "cpc": 2.42, "cpm": 40.29, "conv": 3.09}, {"d": "24/08", "spend": 362.16, "imp": 9945, "lc": 123, "leads": 1, "cpl": 362.16, "ctr": 1.24, "cpc": 2.94, "cpm": 36.42, "conv": 0.81}, {"d": "25/08", "spend": 394.74, "imp": 9494, "lc": 126, "leads": 3, "cpl": 131.58, "ctr": 1.33, "cpc": 3.13, "cpm": 41.58, "conv": 2.38}, {"d": "26/08", "spend": 365.99, "imp": 8721, "lc": 121, "leads": 1, "cpl": 365.99, "ctr": 1.39, "cpc": 3.02, "cpm": 41.97, "conv": 0.83}, {"d": "27/08", "spend": 445.33, "imp": 9146, "lc": 131, "leads": 4, "cpl": 111.33, "ctr": 1.43, "cpc": 3.4, "cpm": 48.69, "conv": 3.05}, {"d": "28/08", "spend": 372.0, "imp": 8781, "lc": 104, "leads": 4, "cpl": 93.0, "ctr": 1.18, "cpc": 3.58, "cpm": 42.36, "conv": 3.85}, {"d": "29/08", "spend": 377.69, "imp": 7089, "lc": 106, "leads": 3, "cpl": 125.9, "ctr": 1.5, "cpc": 3.56, "cpm": 53.28, "conv": 2.83}, {"d": "30/08", "spend": 429.04, "imp": 8624, "lc": 86, "leads": 3, "cpl": 143.01, "ctr": 1.0, "cpc": 4.99, "cpm": 49.75, "conv": 3.49}, {"d": "31/08", "spend": 408.73, "imp": 10998, "lc": 135, "leads": 2, "cpl": 204.37, "ctr": 1.23, "cpc": 3.03, "cpm": 37.16, "conv": 1.48}, {"d": "01/09", "spend": 359.23, "imp": 9623, "lc": 72, "leads": 1, "cpl": 359.23, "ctr": 0.75, "cpc": 4.99, "cpm": 37.33, "conv": 1.39}, {"d": "02/09", "spend": 420.07, "imp": 10037, "lc": 86, "leads": 4, "cpl": 105.02, "ctr": 0.86, "cpc": 4.88, "cpm": 41.85, "conv": 4.65}, {"d": "03/09", "spend": 334.49, "imp": 8181, "lc": 86, "leads": 4, "cpl": 83.62, "ctr": 1.05, "cpc": 3.89, "cpm": 40.89, "conv": 4.65}, {"d": "04/09", "spend": 445.85, "imp": 9923, "lc": 100, "leads": 2, "cpl": 222.93, "ctr": 1.01, "cpc": 4.46, "cpm": 44.93, "conv": 2.0}, {"d": "05/09", "spend": 388.29, "imp": 8371, "lc": 116, "leads": 6, "cpl": 64.71, "ctr": 1.39, "cpc": 3.35, "cpm": 46.39, "conv": 5.17}, {"d": "06/09", "spend": 456.44, "imp": 10950, "lc": 128, "leads": 6, "cpl": 76.07, "ctr": 1.17, "cpc": 3.57, "cpm": 41.68, "conv": 4.69}, {"d": "07/09", "spend": 385.18, "imp": 9850, "lc": 106, "leads": 4, "cpl": 96.3, "ctr": 1.08, "cpc": 3.63, "cpm": 39.1, "conv": 3.77}, {"d": "08/09", "spend": 398.04, "imp": 10997, "lc": 115, "leads": 1, "cpl": 398.04, "ctr": 1.05, "cpc": 3.46, "cpm": 36.2, "conv": 0.87}, {"d": "09/09", "spend": 342.63, "imp": 9272, "lc": 97, "leads": 2, "cpl": 171.32, "ctr": 1.05, "cpc": 3.53, "cpm": 36.95, "conv": 2.06}, {"d": "10/09", "spend": 403.83, "imp": 11053, "lc": 137, "leads": 5, "cpl": 80.77, "ctr": 1.24, "cpc": 2.95, "cpm": 36.54, "conv": 3.65}, {"d": "11/09", "spend": 453.86, "imp": 11077, "lc": 126, "leads": 5, "cpl": 90.77, "ctr": 1.14, "cpc": 3.6, "cpm": 40.97, "conv": 3.97}, {"d": "12/09", "spend": 348.22, "imp": 8535, "lc": 104, "leads": 4, "cpl": 87.05, "ctr": 1.22, "cpc": 3.35, "cpm": 40.8, "conv": 3.85}, {"d": "13/09", "spend": 392.49, "imp": 10435, "lc": 110, "leads": 2, "cpl": 196.24, "ctr": 1.05, "cpc": 3.57, "cpm": 37.61, "conv": 1.82}, {"d": "14/09", "spend": 495.62, "imp": 10590, "lc": 105, "leads": 5, "cpl": 99.12, "ctr": 0.99, "cpc": 4.72, "cpm": 46.8, "conv": 4.76}, {"d": "15/09", "spend": 378.67, "imp": 8628, "lc": 82, "leads": 2, "cpl": 189.33, "ctr": 0.95, "cpc": 4.62, "cpm": 43.89, "conv": 2.44}, {"d": "16/09", "spend": 396.48, "imp": 7784, "lc": 82, "leads": 2, "cpl": 198.24, "ctr": 1.05, "cpc": 4.84, "cpm": 50.94, "conv": 2.44}, {"d": "17/09", "spend": 397.57, "imp": 9723, "lc": 91, "leads": 3, "cpl": 132.52, "ctr": 0.94, "cpc": 4.37, "cpm": 40.89, "conv": 3.3}, {"d": "18/09", "spend": 407.49, "imp": 8634, "lc": 108, "leads": 6, "cpl": 67.91, "ctr": 1.25, "cpc": 3.77, "cpm": 47.2, "conv": 5.56}, {"d": "19/09", "spend": 150.45, "imp": 3241, "lc": 51, "leads": 3, "cpl": 50.15, "ctr": 1.57, "cpc": 2.95, "cpm": 46.42, "conv": 5.88}, {"d": "24/09", "spend": 533.35, "imp": 10850, "lc": 125, "leads": 1, "cpl": 533.35, "ctr": 1.15, "cpc": 4.27, "cpm": 49.16, "conv": 0.8}, {"d": "25/09", "spend": 688.66, "imp": 14753, "lc": 205, "leads": 6, "cpl": 114.78, "ctr": 1.39, "cpc": 3.36, "cpm": 46.68, "conv": 2.93}, {"d": "26/09", "spend": 683.7, "imp": 14130, "lc": 215, "leads": 11, "cpl": 62.15, "ctr": 1.52, "cpc": 3.18, "cpm": 48.39, "conv": 5.12}, {"d": "27/09", "spend": 508.8, "imp": 12434, "lc": 165, "leads": 2, "cpl": 254.4, "ctr": 1.33, "cpc": 3.08, "cpm": 40.92, "conv": 1.21}, {"d": "28/09", "spend": 322.89, "imp": 8532, "lc": 97, "leads": 2, "cpl": 161.44, "ctr": 1.14, "cpc": 3.33, "cpm": 37.84, "conv": 2.06}, {"d": "29/09", "spend": 375.1, "imp": 8237, "lc": 79, "leads": 4, "cpl": 93.78, "ctr": 0.96, "cpc": 4.75, "cpm": 45.54, "conv": 5.06}, {"d": "30/09", "spend": 440.54, "imp": 8642, "lc": 96, "leads": 9, "cpl": 48.95, "ctr": 1.11, "cpc": 4.59, "cpm": 50.98, "conv": 9.38}, {"d": "01/10", "spend": 341.01, "imp": 7116, "lc": 69, "leads": 1, "cpl": 341.01, "ctr": 0.97, "cpc": 4.94, "cpm": 47.92, "conv": 1.45}, {"d": "02/10", "spend": 459.73, "imp": 22423, "lc": 194, "leads": 3, "cpl": 153.24, "ctr": 0.87, "cpc": 2.37, "cpm": 20.5, "conv": 1.55}, {"d": "03/10", "spend": 343.69, "imp": 11784, "lc": 134, "leads": 5, "cpl": 68.74, "ctr": 1.14, "cpc": 2.56, "cpm": 29.17, "conv": 3.73}, {"d": "04/10", "spend": 427.23, "imp": 18355, "lc": 168, "leads": 6, "cpl": 71.2, "ctr": 0.92, "cpc": 2.54, "cpm": 23.28, "conv": 3.57}, {"d": "05/10", "spend": 350.78, "imp": 17109, "lc": 111, "leads": 3, "cpl": 116.93, "ctr": 0.65, "cpc": 3.16, "cpm": 20.5, "conv": 2.7}, {"d": "06/10", "spend": 366.08, "imp": 15017, "lc": 114, "leads": 4, "cpl": 91.52, "ctr": 0.76, "cpc": 3.21, "cpm": 24.38, "conv": 3.51}, {"d": "07/10", "spend": 396.18, "imp": 10352, "lc": 104, "leads": 4, "cpl": 99.05, "ctr": 1.0, "cpc": 3.81, "cpm": 38.27, "conv": 3.85}, {"d": "08/10", "spend": 446.44, "imp": 13726, "lc": 157, "leads": 4, "cpl": 111.61, "ctr": 1.14, "cpc": 2.84, "cpm": 32.53, "conv": 2.55}, {"d": "09/10", "spend": 379.27, "imp": 10245, "lc": 119, "leads": 3, "cpl": 126.42, "ctr": 1.16, "cpc": 3.19, "cpm": 37.02, "conv": 2.52}, {"d": "10/10", "spend": 390.65, "imp": 10304, "lc": 143, "leads": 4, "cpl": 97.66, "ctr": 1.39, "cpc": 2.73, "cpm": 37.91, "conv": 2.8}, {"d": "11/10", "spend": 454.25, "imp": 12965, "lc": 168, "leads": 2, "cpl": 227.12, "ctr": 1.3, "cpc": 2.7, "cpm": 35.04, "conv": 1.19}, {"d": "12/10", "spend": 450.72, "imp": 15226, "lc": 171, "leads": 4, "cpl": 112.68, "ctr": 1.12, "cpc": 2.64, "cpm": 29.6, "conv": 2.34}, {"d": "13/10", "spend": 343.62, "imp": 12216, "lc": 128, "leads": 3, "cpl": 114.54, "ctr": 1.05, "cpc": 2.68, "cpm": 28.13, "conv": 2.34}, {"d": "14/10", "spend": 404.65, "imp": 13796, "lc": 162, "leads": 5, "cpl": 80.93, "ctr": 1.17, "cpc": 2.5, "cpm": 29.33, "conv": 3.09}, {"d": "15/10", "spend": 363.57, "imp": 11727, "lc": 156, "leads": 5, "cpl": 72.71, "ctr": 1.33, "cpc": 2.33, "cpm": 31.0, "conv": 3.21}, {"d": "16/10", "spend": 482.55, "imp": 19171, "lc": 329, "leads": 13, "cpl": 37.12, "ctr": 1.72, "cpc": 1.47, "cpm": 25.17, "conv": 3.95}, {"d": "17/10", "spend": 0.03, "imp": 3, "lc": 0, "leads": 0, "cpl": null, "ctr": 0.0, "cpc": null, "cpm": 10.0, "conv": null}], "melhor": {"spend": 2710.19, "imp": 85089, "lc": 837, "leads": 30, "cpl": 90.34, "ctr": 0.98, "cpc": 3.24, "cpm": 31.85, "conv": 3.58, "label": "28/09–04/10", "parcial": false}, "criativos": [{"spend": 4079.67, "imp": 100944, "lc": 1342, "leads": 45, "cpl": 90.66, "ctr": 1.33, "cpc": 3.04, "cpm": 40.42, "conv": 3.35, "ad": "ESTATICA B", "emp": "Ibirapuera", "share": 65, "n_ads": 2, "img": "imgs/resumo_ibirapuera.jpg?v=20261028"}]};
+const brl = v => v==null ? '—' : v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const brl0 = v => v==null ? '—' : v.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
+const int = v => v==null ? '—' : Math.round(v).toLocaleString('pt-BR');
+const pct = v => v==null ? '—' : v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';
+const dec = v => v==null ? '—' : v.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1});
+
+document.getElementById('periodo').textContent = 'Período: ' + D.periodo;
+document.getElementById('atualizado').textContent = 'Atualizado em ' + D.atualizado;
+
+const T = D.total;
+const kpis = [
+  ['Leads totais', int(T.leads), dec(T.leads_dia)+' leads/dia em média', true],
+  ['CPL médio', brl(T.cpl), 'custo por lead', true],
+  ['Investimento', brl0(T.spend), 'último dia com verba: '+D.ultimo_invest],
+  ['Média semanal', int(T.leads / D.semanas.filter(s=>!s.parcial).length || 0), D.melhor ? 'melhor semana: '+D.melhor.leads+' ('+D.melhor.label+')' : 'leads por semana cheia'],
+  ['Impressões', int(T.imp), 'CPM '+brl(T.cpm)],
+  ['Cliques no link', int(T.lc), 'CPC '+brl(T.cpc)],
+  ['CTR', pct(T.ctr), 'cliques no link ÷ impressões'],
+  ['Clique → lead', pct(T.conv), 'leads ÷ cliques no link'],
+];
+document.getElementById('kpis').innerHTML = kpis.map(([l,v,h,m]) =>
+  `<div class="kpi${m?' main':''}"><div class="l">${l}</div><div class="v">${v}</div><div class="h">${h}</div></div>`).join('');
+
+// Melhores criativos
+if (!D.criativos || !D.criativos.length) document.getElementById('secCr').style.display = 'none';
+else document.getElementById('crs').innerHTML = D.criativos.map(c => `<div class="cr">
+  ${c.img ? `<img src="${c.img}" alt="${c.ad}" loading="lazy">` : ''}
+  <div><div class="emp">${c.emp}</div><div class="nm">${c.ad}</div>
+  <dl><dt>Leads</dt><dd>${int(c.leads)}${c.share!=null?` <span style="color:var(--muted);font-weight:400">(${c.share}% do empreend.)</span>`:''}</dd>
+  <dt>CPL</dt><dd>${brl(c.cpl)}</dd><dt>Investimento</dt><dd>${brl0(c.spend)}</dd>
+  <dt>Impressões</dt><dd>${int(c.imp)}</dd><dt>CTR</dt><dd>${pct(c.ctr)}</dd><dt>Clique → lead</dt><dd>${pct(c.conv)}</dd></dl></div></div>`).join('');
+
+// Tabelas
+const maxLeads = Math.max(...D.semanas.map(s=>s.leads), 1);
+document.getElementById('capSem').textContent = D.semanas.length + ' semanas · semanas incompletas marcadas';
+const sumRow = (lbl, t) => `<tfoot><tr><td>${lbl}</td><td>${brl(t.spend)}</td><td>${int(t.leads)}</td><td>${brl(t.cpl)}</td><td>${int(t.imp)}</td><td>${int(t.lc)}</td><td>${pct(t.ctr)}</td><td>${pct(t.conv)}</td></tr></tfoot>`;
+document.getElementById('tSem').innerHTML =
+  `<thead><tr><th>Semana</th><th>Investimento</th><th>Leads</th><th>CPL</th><th>Impressões</th><th>Cliques</th><th>CTR</th><th>Clique→lead</th></tr></thead><tbody>` +
+  D.semanas.map(s => `<tr><td>${s.label}${s.parcial?'<span class="tag">parcial</span>':''}</td><td>${brl(s.spend)}</td>
+    <td><span class="bar" style="width:${Math.round(s.leads/maxLeads*48)}px"></span>${int(s.leads)}</td>
+    <td>${brl(s.cpl)}</td><td>${int(s.imp)}</td><td>${int(s.lc)}</td><td>${pct(s.ctr)}</td><td>${pct(s.conv)}</td></tr>`).join('') +
+  '</tbody>' + sumRow('Total', T);
+document.getElementById('tMes').innerHTML =
+  `<thead><tr><th>Mês</th><th>Dias</th><th>Investimento</th><th>Leads</th><th>CPL</th></tr></thead><tbody>` +
+  D.meses.map(m => `<tr><td>${m.label}</td><td>${m.dias}</td><td>${brl0(m.spend)}</td><td>${int(m.leads)}</td><td>${brl(m.cpl)}</td></tr>`).join('') +
+  `</tbody><tfoot><tr><td>Total</td><td></td><td>${brl0(T.spend)}</td><td>${int(T.leads)}</td><td>${brl(T.cpl)}</td></tr></tfoot>`;
+
+// Gráficos
+let charts = [];
+function css(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+function draw(){
+  charts.forEach(c=>c.destroy()); charts = [];
+  const acc = css('--accent'), s2 = css('--series2'), mut = css('--muted'), grid = css('--grid'), card = css('--card'), ink = css('--ink');
+  Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
+  Chart.defaults.color = mut;
+  const tip = {backgroundColor:card, titleColor:ink, bodyColor:ink, borderColor:grid, borderWidth:1, padding:10};
+  charts.push(new Chart(document.getElementById('cSemana'), {
+    data:{labels:D.semanas.map(s=>s.label + (s.parcial?'*':'')), datasets:[
+      {type:'bar', label:'Leads', data:D.semanas.map(s=>s.leads), backgroundColor:acc, borderRadius:4, maxBarThickness:42, yAxisID:'y', order:2},
+      {type:'line', label:'CPL', data:D.semanas.map(s=>s.cpl), borderColor:s2, backgroundColor:s2, borderWidth:2, pointRadius:3, tension:.3, yAxisID:'y1', order:1, spanGaps:true},
+    ]},
+    options:{responsive:true, maintainAspectRatio:false, interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:false}, tooltip:{...tip, callbacks:{label:c=>c.dataset.label==='CPL' ? ' CPL: '+brl(c.raw) : ' Leads: '+c.raw}}},
+      scales:{x:{grid:{display:false}, ticks:{maxRotation:0, autoSkip:true}},
+        y:{beginAtZero:true, grid:{color:grid}, title:{display:true,text:'Leads'}},
+        y1:{beginAtZero:true, position:'right', grid:{display:false}, ticks:{callback:v=>'R$ '+v}, title:{display:true,text:'CPL'}}}}
+  }));
+  charts.push(new Chart(document.getElementById('cDia'), {
+    type:'bar',
+    data:{labels:D.diario.map(d=>d.d), datasets:[{label:'Investimento', data:D.diario.map(d=>d.spend), backgroundColor:acc, borderRadius:2}]},
+    options:{responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}, tooltip:{...tip, callbacks:{label:c=>' '+brl(c.raw)+' · '+D.diario[c.dataIndex].leads+' leads'}}},
+      scales:{x:{grid:{display:false}, ticks:{maxRotation:0, autoSkip:true, maxTicksLimit:8}}, y:{beginAtZero:true, grid:{color:grid}, ticks:{callback:v=>'R$ '+v}}}}
+  }));
+}
+draw();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+</script>
+</body>
+</html>
