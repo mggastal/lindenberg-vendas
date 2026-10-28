@@ -1,4 +1,4 @@
-name: Atualizar Dashboard
+name: Atualizar Resumo
 on:
   schedule:
     - cron: '0 9 * * *'   # 06:00 Brasília = 09:00 UTC
@@ -16,15 +16,14 @@ jobs:
         with:
           python-version: '3.11'
       - name: Instalar dependências
-        run: pip install pandas requests openpyxl
+        run: pip install requests
       - name: Rodar gerador
         run: |
-          python dashboard.py
           python resumo.py resumo.html
       - name: Commit e push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html resumo.html imgs/
-          git diff --staged --quiet || git commit -m "Dashboard atualizado $(date +'%d/%m/%Y %H:%M')"
+          git add resumo.html imgs/
+          git diff --staged --quiet || git commit -m "Resumo atualizado $(date +'%d/%m/%Y %H:%M')"
           git push

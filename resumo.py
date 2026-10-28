@@ -289,7 +289,7 @@ const kpis = [
   ['Leads totais', int(T.leads), dec(T.leads_dia)+' leads/dia em média', true],
   ['CPL médio', brl(T.cpl), 'custo por lead', true],
   ['Investimento', brl0(T.spend), 'último dia com verba: '+D.ultimo_invest],
-  ['Média semanal', int(T.leads / D.semanas.filter(s=>!s.parcial).length || 0), D.melhor ? 'melhor semana: '+D.melhor.leads+' ('+D.melhor.label+')' : 'leads por semana cheia'],
+  ['Média de leads por semana', int(T.leads / D.semanas.filter(s=>!s.parcial).length || 0), D.melhor ? 'melhor semana: '+D.melhor.leads+' leads ('+D.melhor.label+')' : 'semanas completas'],
   ['Impressões', int(T.imp), 'CPM '+brl(T.cpm)],
   ['Cliques no link', int(T.lc), 'CPC '+brl(T.cpc)],
   ['CTR', pct(T.ctr), 'cliques no link ÷ impressões'],
