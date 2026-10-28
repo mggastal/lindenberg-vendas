@@ -131,11 +131,12 @@ document.getElementById('periodo').textContent = 'Período: ' + D.periodo;
 document.getElementById('atualizado').textContent = 'Atualizado em ' + D.atualizado;
 
 const T = D.total;
+const cheias = D.semanas.filter(s=>!s.parcial);   // média só com semanas completas
 const kpis = [
   ['Leads totais', int(T.leads), dec(T.leads_dia)+' leads/dia em média', true],
   ['CPL médio', brl(T.cpl), 'custo por lead', true],
   ['Investimento', brl0(T.spend), 'último dia com verba: '+D.ultimo_invest],
-  ['Média de leads por semana', int(T.leads / D.semanas.filter(s=>!s.parcial).length || 0), D.melhor ? 'melhor semana: '+D.melhor.leads+' leads ('+D.melhor.label+')' : 'semanas completas'],
+  ['Média de leads por semana', int(cheias.length ? cheias.reduce((t,s)=>t+s.leads,0) / cheias.length : null), D.melhor ? 'melhor semana: '+D.melhor.leads+' leads ('+D.melhor.label+')' : 'semanas completas'],
   ['Impressões', int(T.imp), 'CPM '+brl(T.cpm)],
   ['Cliques no link', int(T.lc), 'CPC '+brl(T.cpc)],
   ['CTR', pct(T.ctr), 'cliques no link ÷ impressões'],
