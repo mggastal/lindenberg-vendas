@@ -325,14 +325,38 @@ document.getElementById('tMes').innerHTML =
 
 // Gráficos
 let charts = [];
+// Rótulos de dados: leads dentro do topo da barra, CPL acima do ponto da linha
+const rotulos = {id:'rotulos', afterDatasetsDraw(chart){
+  const {ctx} = chart;
+  ctx.save(); ctx.textAlign = 'center'; ctx.font = "600 11px 'DM Sans', system-ui, sans-serif";
+  chart.data.datasets.forEach((ds, i) => {
+    const meta = chart.getDatasetMeta(i);
+    if (meta.hidden) return;
+    meta.data.forEach((el, j) => {
+      const v = ds.data[j]; if (v == null) return;
+      if (ds.type === 'bar') {
+        ctx.fillStyle = '#fff'; ctx.textBaseline = 'top';
+        ctx.fillText(v, el.x, el.y + 5);
+      } else {
+        const t = 'R$ ' + Math.round(v);
+        ctx.textBaseline = 'bottom';
+        ctx.lineWidth = 3; ctx.strokeStyle = css('--card'); ctx.strokeText(t, el.x, el.y - 6);
+        ctx.fillStyle = css('--ink'); ctx.fillText(t, el.x, el.y - 6);
+      }
+    });
+  });
+  ctx.restore();
+}};
 function css(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
 function draw(){
   charts.forEach(c=>c.destroy()); charts = [];
   const acc = css('--accent'), s2 = css('--series2'), mut = css('--muted'), grid = css('--grid'), card = css('--card'), ink = css('--ink');
   Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
   Chart.defaults.color = mut;
+  const maxCpl = Math.max(...D.semanas.map(s=>s.cpl||0), 1);
   const tip = {backgroundColor:card, titleColor:ink, bodyColor:ink, borderColor:grid, borderWidth:1, padding:10};
   charts.push(new Chart(document.getElementById('cSemana'), {
+    plugins:[rotulos],
     data:{labels:D.semanas.map(s=>s.label + (s.parcial?'*':'')), datasets:[
       {type:'bar', label:'Leads', data:D.semanas.map(s=>s.leads), backgroundColor:acc, borderRadius:4, maxBarThickness:42, yAxisID:'y', order:2},
       {type:'line', label:'CPL', data:D.semanas.map(s=>s.cpl), borderColor:s2, backgroundColor:s2, borderWidth:2, pointRadius:3, tension:.3, yAxisID:'y1', order:1, spanGaps:true},
@@ -340,8 +364,9 @@ function draw(){
     options:{responsive:true, maintainAspectRatio:false, interaction:{mode:'index',intersect:false},
       plugins:{legend:{display:false}, tooltip:{...tip, callbacks:{label:c=>c.dataset.label==='CPL' ? ' CPL: '+brl(c.raw) : ' Leads: '+c.raw}}},
       scales:{x:{grid:{display:false}, ticks:{maxRotation:0, autoSkip:true}},
-        y:{beginAtZero:true, grid:{color:grid}, title:{display:true,text:'Leads'}},
-        y1:{beginAtZero:true, position:'right', grid:{display:false}, ticks:{callback:v=>'R$ '+v}, title:{display:true,text:'CPL'}}}}
+        // barras na metade de baixo, linha do CPL na faixa de cima (rótulos não se sobrepõem)
+        y:{beginAtZero:true, max:maxLeads*1.9, display:false},
+        y1:{min:-maxCpl*1.25, max:maxCpl*1.18, display:false}}}
   }));
   charts.push(new Chart(document.getElementById('cDia'), {
     type:'bar',
