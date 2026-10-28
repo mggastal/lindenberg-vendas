@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Resumo Geral — Lindenberg Vendas (Sobé Estratégias)
+Resumo Geral — Lindenberg Vendas (Grigoletti Mídias)
 Lê a aba meta-ads da planilha e gera um HTML enxuto: KPIs, leads/CPL por semana e por mês.
 Sem criativos e sem quebra por produto/campanha.
 """
@@ -158,7 +158,7 @@ TEMPLATE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lindenberg Vendas · Resumo</title>
-<link rel="icon" href="https://mggastal.github.io/sobe-template/sobe.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23192638'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='800' font-size='17' fill='%23E07832' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -219,9 +219,8 @@ tfoot td{font-weight:700;border-top:2px solid var(--line)}
 .cr dd{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
 .note{font-size:12px;color:var(--muted);margin-top:10px}
 footer{display:flex;justify-content:center;align-items:center;gap:8px;color:var(--muted);font-size:12px;margin-top:24px}
-footer img{height:22px}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .logo-sobe{filter:brightness(0) invert(1)}}
-:root[data-theme="dark"] .logo-sobe{filter:brightness(0) invert(1)}
+.gm{font-size:11px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#E07832}
+.gm span{color:var(--ink);font-weight:400}
 @media (max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2,.crs{grid-template-columns:1fr}}
 @media (max-width:520px){.cr{flex-direction:column}.cr img{width:100%;height:auto;aspect-ratio:1}}
 @media (max-width:420px){.kpi .v{font-size:21px}h1{font-size:22px}.chart{height:250px}}
@@ -271,7 +270,7 @@ footer img{height:22px}
     </section>
   </div>
 
-  <footer>Desenvolvido por <img class="logo-sobe" src="https://mggastal.github.io/sobe-template/sobe.png" alt="Sobé"></footer>
+  <footer>Desenvolvido por <span class="gm">Grigoletti <span>Mídias</span></span></footer>
 </div>
 
 <script>
